@@ -1,6 +1,8 @@
+import datetime
+import re
+from builtins import print
 
-data = """
-George Washington, 1789-1797
+data = """George Washington, 1789-1797
 John Adams, 1797-1801
 Thomas Jefferson, 1801-1809
 James Madison, 1809-1817
@@ -43,5 +45,18 @@ Ronald Wilson Reagan, 1981-1989
 George Herbert Walker Bush, 1989-1993
 William Jefferson Clinton, 1993-2001
 George Walker Bush, 2001-2009
-Barack Hussein Obama, 2009-
-"""
+Barack Hussein Obama, 2009-"""
+
+dataList = re.split('\n', data)
+
+for id,value in enumerate(dataList):
+    dataList[id] = value.rsplit(', ', 1) #to avoid specifical names
+    years = dataList[id][1]
+    if years.endswith('-'):
+        years += str(datetime.datetime.now().year)
+    if years.__len__() < 5:
+        years += '-' + years
+    tmp = years.split('-')
+    dataList[id][1] = int(tmp[1]) - int(tmp[0])
+
+print(sorted(dataList, key=lambda ruleTime: ruleTime[1], reverse = True))
